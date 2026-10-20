@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Label + percent, the bar and the reset line: the widget's BarBlock. -->
+<!-- Label + percent, the bar and the reset line: the widget's BarBlock.
+     Included twice, so the ids repeat: no saved state, or a theme switch
+     restores both bars to the same value. render() repaints them anyway. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -36,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:max="100"
+        android:saveEnabled="false"
         app:indicatorTrackGapSize="0dp"
         app:trackColor="?attr/colorSurfaceVariant"
         app:trackCornerRadius="3dp"
