@@ -4,6 +4,20 @@ Your Claude subscription usage on the home screen and in the status bar.
 An Android port of the ideas in
 [plasma-claude-usage](https://github.com/gdevenyi/plasma-claude-usage).
 
+> **This is a fork** of [gdevenyi/android-claude-usage](https://github.com/gdevenyi/android-claude-usage).
+> It adds:
+>
+> - **Android 10+** — upstream needs Android 13. Below 13 there is no
+>   notification permission to ask for; below 12 the notification's bars keep
+>   the default tint (the percentages are still colour coded).
+> - **Clock mode** — an always-on screen for a spare phone: a large clock, the
+>   date and the battery level beside the widget's full layout. See
+>   [Clock mode](#clock-mode).
+>
+> It keeps upstream's application id, so it installs over (and can't sit
+> beside) the upstream app. Everything else is upstream's work; the changes
+> are in the commits after upstream's `master`.
+
 - **Home-screen widget** — session (5h) and weekly (7d) percentages, colour
   coded, with progress bars, reset countdowns and the per-model breakdown.
   It scales with the size you give it, from a 2×1 chip to a full panel.
@@ -39,28 +53,29 @@ The notification carries the same numbers, collapsed and expanded:
 <img src="screenshots/notification-collapsed.png" width="440" alt="Collapsed notification">
 <img src="screenshots/notification-expanded.png" width="440" alt="Expanded notification">
 
+Clock mode, in its dark theme:
+
+<img src="screenshots/clock.png" width="570" alt="Clock mode">
+
 The app holds the settings and the history charts:
 
 <img src="screenshots/settings.png" width="330" alt="Settings screen">
 
 ## Requirements
 
-Android 13 or later, and a Claude subscription (Pro or Max).
+Android 10 or later, and a Claude subscription (Pro or Max).
 
 ## Install
 
-Not on F-Droid yet — the repository is prepared for it, see
-[fdroid/README.md](fdroid/README.md).
+Every build produces an APK you can install: open the latest run under
+[Actions](https://github.com/killbeezero/android-claude-usage/actions) and
+download the `apk` artifact (you need to be signed in to GitHub).
 
-Until then, every build produces an APK you can install. Tagged versions have
-them attached to the [release](https://github.com/gdevenyi/android-claude-usage/releases);
-for other commits, open the run under
-[Actions](https://github.com/gdevenyi/android-claude-usage/actions) and
-download the `apk` artifact.
-
-> A debug APK is signed with a key the CI runner generates for itself, so two
-> builds from different runs will not install over each other — uninstall
-> first. Set up signing (below) to get release APKs that upgrade cleanly.
+> This fork signs debug APKs with a fixed key kept in the repository
+> (`app/debug.keystore`, the standard `android` / `androiddebugkey`
+> credentials), so newer builds install over older ones. It is a debug key,
+> not a secret: anyone can sign with it. Switching from an upstream build
+> means uninstalling first, since that one is signed differently.
 
 Or build it yourself:
 
@@ -113,6 +128,26 @@ parameter of the authorization URL, so it ends up in your browser history.
 That only matters for a login you start and abandon — anything able to read
 your browser history could finish it while the code is still valid. Completing
 (or simply redoing) the login makes the code useless.
+
+## Clock mode
+
+Meant for an old phone left on its charger. Open it from its own launcher
+icon, **Usage Clock**, or from **Clock mode** in the app.
+
+- Landscape and full screen, and the screen stays on for as long as it is
+  showing — whatever the system's screen timeout says.
+- A large clock (12/24 h follows the system) and the date in the system
+  language, beside the widget's full layout: both windows with reset times,
+  the per-model rows and the last update.
+- The battery level in the top-left corner, with a bolt and "Charging" on the
+  charger and red below 15%.
+- The half-circle button cycles the theme: follow system, dark (on pure
+  black), light. The ↻ button refreshes.
+- Everything shifts a few pixels each minute, against burn-in.
+- Long-press the usage panel to get back to the app; a stray tap does nothing.
+
+Text is sized independently of the system font size, so the layout fits a
+small screen even with large fonts.
 
 ## Settings
 
