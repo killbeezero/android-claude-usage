@@ -16,7 +16,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="15sp" />
+        android:textSize="13dp" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/bar"
@@ -36,5 +36,5 @@
         android:layout_height="wrap_content"
         android:gravity="end"
         android:textAppearance="?attr/textAppearanceLabelLarge"
-        android:textSize="16sp" />
+        android:textSize="14dp" />
 </LinearLayout>

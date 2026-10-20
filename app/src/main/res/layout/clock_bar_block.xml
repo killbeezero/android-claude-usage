@@ -19,7 +19,7 @@
             android:layout_weight="1"
             android:textAppearance="?attr/textAppearanceTitleSmall"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="18sp" />
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/pct"
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:textAppearance="?attr/textAppearanceTitleLarge"
-            android:textSize="30sp" />
+            android:textSize="26dp" />
     </LinearLayout>
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -49,5 +49,5 @@
         android:layout_marginTop="4dp"
         android:maxLines="1"
         android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="15sp" />
+        android:textSize="13dp" />
 </LinearLayout>

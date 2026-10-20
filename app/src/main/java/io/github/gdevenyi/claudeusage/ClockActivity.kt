@@ -13,6 +13,7 @@ import android.widget.TextClock
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -55,6 +56,17 @@ class ClockActivity : AppCompatActivity() {
         setContentView(R.layout.activity_clock)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        // Paint behind the notch too, instead of a black letterbox strip, and
+        // keep the content clear of it.
+        window.attributes.layoutInDisplayCutoutMode =
+            WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        val content = findViewById<View>(R.id.content)
+        val pad = content.paddingLeft
+        ViewCompat.setOnApplyWindowInsetsListener(content) { v, insets ->
+            val cut = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
+            v.setPadding(pad + cut.left, pad + cut.top, pad + cut.right, pad + cut.bottom)
+            insets
+        }
         hideBars()
 
         val datePattern = DateFormat.getBestDateTimePattern(Locale.getDefault(), "MMMdEEEE")
