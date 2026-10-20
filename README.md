@@ -18,6 +18,27 @@ An Android port of the ideas in
 > beside) the upstream app. Everything else is upstream's work; the changes
 > are in the commits after upstream's `master`.
 
+## 中文說明
+
+在 Android 桌面小工具和通知列顯示 Claude 訂閱方案的使用量：5 小時 session、7 天
+weekly 的百分比、重置倒數，以及各模型的用量。這個版本改自
+[gdevenyi/android-claude-usage](https://github.com/gdevenyi/android-claude-usage)，
+另外加了：
+
+- **支援 Android 10 以上**（原版要 Android 13）。
+- **時鐘模式**：適合拿閒置的舊手機插著充電，當成常駐的桌面時鐘。橫向全螢幕、螢幕常亮，
+  左邊是大字時鐘、日期和電量（充電時顯示「充電中」），右邊是和小工具一樣的使用量面板。
+  半圓按鈕切換主題（跟隨系統／深色／淺色），長按面板回到 app。從桌面的
+  **Usage Clock** 圖示，或 app 裡的 **Clock mode** 按鈕開啟。
+
+**安裝**：到 [Releases](https://github.com/killbeezero/android-claude-usage/releases/latest)
+下載 APK 安裝。裝過原版的話要先解除安裝，因為簽章不同。
+
+**登入**：打開 app 按 **Log in with Claude**，在瀏覽器授權後，把畫面上的代碼貼回 app。
+app 自己保存登入憑證，不會讀取或影響電腦上的 Claude Code。
+
+介面是英文的，只有時鐘模式的電量文字有中文。授權沿用原專案的 GPL-3.0。
+
 - **Home-screen widget** — session (5h) and weekly (7d) percentages, colour
   coded, with progress bars, reset countdowns and the per-model breakdown.
   It scales with the size you give it, from a 2×1 chip to a full panel.
