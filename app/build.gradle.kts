@@ -35,6 +35,8 @@ android {
     lint {
         // Upstream calls Glance's resource ColorProvider, flagged library-internal.
         disable += "RestrictedApi"
+        // Only the clock's battery words are translated; the rest stays English.
+        disable += "MissingTranslation"
     }
 
     buildFeatures {
