@@ -32,6 +32,11 @@ android {
         }
     }
 
+    lint {
+        // Upstream calls Glance's resource ColorProvider, flagged library-internal.
+        disable += "RestrictedApi"
+    }
+
     buildFeatures {
         compose = true
     }
