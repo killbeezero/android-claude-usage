@@ -3,4 +3,7 @@
     <color name="usage_ok">#81C784</color>
     <color name="usage_warn">#FFB74D</color>
     <color name="usage_crit">#E57373</color>
+
+    <!-- Clock screen backdrop; pure black at night so it stays dim always-on. -->
+    <color name="clock_bg">#000000</color>
 </resources>

@@ -74,6 +74,10 @@ class Store(ctx: Context) {
     var alerted: Set<String>
         get() = p.getStringSet("alerted", null).orEmpty().toSet()
         set(v) = p.edit().putStringSet("alerted", v).apply()
+    /** Clock screen theme: 0 = follow system, 1 = dark, 2 = light. */
+    var clockTheme: Int
+        get() = p.getInt("clockTheme", 0)
+        set(v) = p.edit().putInt("clockTheme", v).apply()
     var intervalMin: Int
         get() = p.getInt("intervalMin", 15)
         set(v) = p.edit().putInt("intervalMin", v).apply()

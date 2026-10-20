@@ -135,6 +135,10 @@ class MainActivity : AppCompatActivity() {
             updateUi()
         }
 
+        findViewById<MaterialButton>(R.id.clockBtn).setOnClickListener {
+            startActivity(Intent(this, ClockActivity::class.java))
+        }
+
         findViewById<MaterialButton>(R.id.releasesBtn).setOnClickListener {
             startActivity(
                 Intent(

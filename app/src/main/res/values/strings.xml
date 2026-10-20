@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Claude Usage</string>
     <string name="widget_description">Claude session and weekly usage. Tap to open.</string>
+    <string name="clock_name">Usage Clock</string>
 </resources>

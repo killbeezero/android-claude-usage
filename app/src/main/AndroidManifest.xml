@@ -22,6 +22,18 @@
             </intent-filter>
         </activity>
 
+        <!-- Its own launcher entry, so a spare phone can open straight into it. -->
+        <activity
+            android:name=".ClockActivity"
+            android:exported="true"
+            android:label="@string/clock_name"
+            android:screenOrientation="sensorLandscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <receiver
             android:name=".UsageWidgetReceiver"
             android:exported="true"
