@@ -67,7 +67,9 @@ Android 10 or later, and a Claude subscription (Pro or Max).
 
 ## Install
 
-Every build produces an APK you can install: open the latest run under
+Download the APK from the latest
+[release](https://github.com/killbeezero/android-claude-usage/releases/latest).
+Untagged commits build one too: open the run under
 [Actions](https://github.com/killbeezero/android-claude-usage/actions) and
 download the `apk` artifact (you need to be signed in to GitHub).
 
