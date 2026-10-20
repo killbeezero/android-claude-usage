@@ -3,4 +3,6 @@
     <string name="app_name">Claude Usage</string>
     <string name="widget_description">Claude session and weekly usage. Tap to open.</string>
     <string name="clock_name">Usage Clock</string>
+    <string name="battery_charging">Charging</string>
+    <string name="battery_full">Full</string>
 </resources>

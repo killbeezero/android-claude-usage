@@ -1,7 +1,11 @@
 package io.github.gdevenyi.claudeusage
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
+import android.os.BatteryManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -40,6 +44,11 @@ class ClockActivity : AppCompatActivity() {
     // Field: prefs hold listeners weakly, so an inline lambda would be collected.
     private val onPrefChange =
         SharedPreferences.OnSharedPreferenceChangeListener { _, _ -> render() }
+
+    // ACTION_BATTERY_CHANGED is sticky: registering hands back the current state.
+    private val onBattery = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) = showBattery(intent)
+    }
 
     private val everyMinute = object : Runnable {
         override fun run() {
@@ -94,6 +103,7 @@ class ClockActivity : AppCompatActivity() {
         store.prefs.registerOnSharedPreferenceChangeListener(onPrefChange)
         val age = System.currentTimeMillis() - (Usage.cached(this)?.fetchedAt ?: 0)
         if (store.loggedIn && age > store.intervalMin * 60_000L) RefreshWorker.refreshNow(this)
+        registerReceiver(onBattery, IntentFilter(Intent.ACTION_BATTERY_CHANGED))?.let(::showBattery)
         handler.removeCallbacks(everyMinute)
         everyMinute.run()
     }
@@ -101,6 +111,7 @@ class ClockActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         Store(this).prefs.unregisterOnSharedPreferenceChangeListener(onPrefChange)
+        unregisterReceiver(onBattery)
         handler.removeCallbacks(everyMinute)
     }
 
@@ -113,6 +124,25 @@ class ClockActivity : AppCompatActivity() {
         WindowInsetsControllerCompat(window, window.decorView).apply {
             hide(WindowInsetsCompat.Type.systemBars())
             systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+    }
+
+    private fun showBattery(intent: Intent) {
+        val raw = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+        val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100)
+        if (raw < 0 || scale <= 0) return
+        val pct = raw * 100 / scale
+        val status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
+        // Plugged in counts as charging too: some chargers report
+        // NOT_CHARGING near the top.
+        val plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0
+        val full = status == BatteryManager.BATTERY_STATUS_FULL
+        val charging = !full && (status == BatteryManager.BATTERY_STATUS_CHARGING || plugged)
+        findViewById<BatteryView>(R.id.battery).set(pct, charging)
+        findViewById<TextView>(R.id.batteryText).text = when {
+            full && plugged -> "$pct% · ${getString(R.string.battery_full)}"
+            charging -> "$pct% · ${getString(R.string.battery_charging)}"
+            else -> "$pct%"
         }
     }
 

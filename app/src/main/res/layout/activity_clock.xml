@@ -20,6 +20,27 @@
             android:gravity="center"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <io.github.gdevenyi.claudeusage.BatteryView
+                    android:id="@+id/battery"
+                    android:layout_width="34dp"
+                    android:layout_height="17dp" />
+
+                <TextView
+                    android:id="@+id/batteryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
             <TextClock
                 android:id="@+id/time"
                 android:layout_width="match_parent"
