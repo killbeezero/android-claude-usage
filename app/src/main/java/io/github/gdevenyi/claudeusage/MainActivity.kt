@@ -51,9 +51,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun askNotifPermission() {
-        if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (!Notif.canNotify(this)) {
             requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
         }
     }
@@ -152,8 +150,7 @@ class MainActivity : AppCompatActivity() {
         // the dialog after two denials, so repeated surprise prompts on every
         // start would burn that quota with the switch still reading "on".
         if ((store.notifEnabled || store.alertsEnabled) && !store.notifAsked &&
-            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-            != PackageManager.PERMISSION_GRANTED
+            !Notif.canNotify(this)
         ) {
             store.notifAsked = true
             requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)

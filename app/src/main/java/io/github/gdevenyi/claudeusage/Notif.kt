@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
+import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
 import java.time.Instant
@@ -93,6 +94,21 @@ object Notif {
     private const val RUNOUT_CHANNEL = "runout"
     private const val RUNOUT_ID = 3
 
+    /** POST_NOTIFICATIONS only exists from Android 13; before that it is implied. */
+    fun canNotify(ctx: Context) = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+        ctx.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+
+    // RemoteViews only takes colour resources from Android 12. Before that the
+    // bars keep the default tint and the text colour is baked in at build time.
+    private fun RemoteViews.tintBar(id: Int, colorRes: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) setColorStateList(id, "setProgressTintList", colorRes)
+    }
+
+    private fun RemoteViews.textColor(ctx: Context, id: Int, colorRes: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) setColor(id, "setTextColor", colorRes)
+        else setTextColor(id, ctx.getColor(colorRes))
+    }
+
     fun update(ctx: Context) {
         val nm = ctx.getSystemService(NotificationManager::class.java)
         val store = Store(ctx)
@@ -101,9 +117,7 @@ object Notif {
             nm.cancel(RESET_ID)
             return
         }
-        if (ctx.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-            != PackageManager.PERMISSION_GRANTED
-        ) return
+        if (!canNotify(ctx)) return
 
         nm.createNotificationChannel(
             NotificationChannel(CHANNEL, "Usage", NotificationManager.IMPORTANCE_LOW)
@@ -200,9 +214,7 @@ object Notif {
     fun resetAlert(ctx: Context) {
         val store = Store(ctx)
         if (!store.notifEnabled || !store.loggedIn) return
-        if (ctx.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-            != PackageManager.PERMISSION_GRANTED
-        ) return
+        if (!canNotify(ctx)) return
         val nm = ctx.getSystemService(NotificationManager::class.java)
         // Its own channel: this one is meant to alert, unlike the silent
         // ongoing one, so it is also the switch for muting just this.
@@ -234,9 +246,7 @@ object Notif {
             store.alerted = alerted
             return
         }
-        if (ctx.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-            != PackageManager.PERMISSION_GRANTED
-        ) return
+        if (!canNotify(ctx)) return
         val due = RunOut.due(History.predictions(ctx, now), alerted, now)
         if (due.isEmpty()) {
             store.alerted = alerted
@@ -277,7 +287,7 @@ object Notif {
             setTextViewText(R.id.headline, title)
             setTextViewText(R.id.subline, text)
             setProgressBar(R.id.collapsedBar, 100, pct, false)
-            setColorStateList(R.id.collapsedBar, "setProgressTintList", Severity.colorRes(d.session))
+            tintBar(R.id.collapsedBar, Severity.colorRes(d.session))
         }
     }
 
@@ -303,9 +313,9 @@ object Notif {
             v.setTextViewText(pctId, "$pct%")
             // Resolve at apply time (like the bar tints) so a light/dark
             // switch re-inflates with the right palette, not a baked-in one.
-            v.setColor(pctId, "setTextColor", Severity.colorRes(w))
+            v.textColor(ctx, pctId, Severity.colorRes(w))
             v.setProgressBar(barId, 100, pct, false)
-            v.setColorStateList(barId, "setProgressTintList", Severity.colorRes(w))
+            v.tintBar(barId, Severity.colorRes(w))
             v.setTextViewText(
                 resetId,
                 Fmt.resetLine(w?.resetsAt, withDay, detailed = true, Fmt.outMark(pred, withDay)),
@@ -327,9 +337,9 @@ object Notif {
                 R.id.modelName, Fmt.label("${model.name} (7d)", model.window) + Fmt.outMark(preds[model.name], true),
             )
             v.setTextViewText(R.id.modelPct, "${model.window.pctInt}%")
-            v.setColor(R.id.modelPct, "setTextColor", Severity.colorRes(model.window))
+            v.textColor(ctx, R.id.modelPct, Severity.colorRes(model.window))
             v.setProgressBar(R.id.modelBar, 100, model.window.pctInt, false)
-            v.setColorStateList(R.id.modelBar, "setProgressTintList", Severity.colorRes(model.window))
+            v.tintBar(R.id.modelBar, Severity.colorRes(model.window))
         }
 
         v.setTextViewText(

@@ -10,10 +10,20 @@ android {
 
     defaultConfig {
         applicationId = "io.github.gdevenyi.claudeusage"
-        minSdk = 33
+        minSdk = 29
         targetSdk = 35
         versionCode = 12
         versionName = "0.6.0"
+    }
+
+    // A fixed debug key, so CI builds install over each other.
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
     }
 
     buildTypes {
