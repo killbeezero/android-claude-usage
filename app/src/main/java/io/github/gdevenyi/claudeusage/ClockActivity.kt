@@ -158,10 +158,6 @@ class ClockActivity : AppCompatActivity() {
     private fun render() {
         val store = Store(this)
         val d = if (store.loggedIn) Usage.cached(this) else null
-        findViewById<TextView>(R.id.plan).apply {
-            text = store.plan
-            visibility = if (store.plan.isEmpty()) View.GONE else View.VISIBLE
-        }
 
         val hint = when {
             !store.loggedIn || store.authBroken -> "Open the app to log in\n(long-press here)"

@@ -101,16 +101,6 @@
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="17dp" />
 
-                <TextView
-                    android:id="@+id/plan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/clock_chip"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp"
-                    android:textAppearance="?attr/textAppearanceLabelMedium"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:textSize="12dp" />
 
                 <ImageButton
                     android:id="@+id/themeBtn"
